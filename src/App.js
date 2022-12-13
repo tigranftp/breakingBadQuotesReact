@@ -9,11 +9,12 @@ function App() {
   const [imgSRC, setImgSRC] = useState("");
   const [isButtonEnabled, setButtonEnabled] = useState(false);
   return (
+    <div>
+    <header>
+      <h1> Breaking Bad Quotes</h1>
+    </header>
     <div className="App">
 
-      <header>
-        <h1> Breaking Bad Quotes</h1>
-      </header>
 
       <main className="main" id="main">
         <button className="button button--janus" id="button" disabled={isButtonEnabled} onClick={() => genQuote(setQoute, setImgSRC, setButtonEnabled)}><span>Generate Quote</span></button>
@@ -21,6 +22,7 @@ function App() {
         <img src={imgSRC}></img>
         </main>
 
+    </div>
     </div>
   );
 }

@@ -1,5 +1,11 @@
-.main {
+.App {
   display: flex;
+  justify-content: center;
+}
+
+.main {
+width: 50%;
+display: flex;
 align-items: center;
 justify-content: center;
 flex-direction: column;
@@ -97,3 +103,7 @@ transform: translate3d(0,-10px,0);
 .button--janus:disabled::before{
   background: #ff0000;
 }
+
+.button--janus:disabled{
+  color: rgb(255, 0, 0);
+ }
