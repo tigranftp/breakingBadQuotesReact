@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import {BreakingBad} from "./breakingBadAPI/api.js";
 import * as d3 from "d3";
 
-
 function App() {
-  const [count, setCount] = useState(0);
+  const [quote, setQoute] = useState("");
+  const [imgSRC, setImgSRC] = useState("");
+  const [isButtonEnabled, setButtonEnabled] = useState(false);
   return (
     <div className="App">
 
@@ -15,8 +16,10 @@ function App() {
       </header>
 
       <main className="main" id="main">
-        <button className="button button--janus" id="button" onClick={() => genQuote()}><span>Generate Quote</span></button>
-      </main>
+        <button className="button button--janus" id="button" disabled={isButtonEnabled} onClick={() => genQuote(setQoute, setImgSRC, setButtonEnabled)}><span>Generate Quote</span></button>
+        <div>{quote}</div>
+        <img src={imgSRC}></img>
+        </main>
 
     </div>
   );
@@ -92,8 +95,12 @@ export default App;
 
 
 
-  function genQuote(){
-    
+  function genQuote(quoteSetter, setterImgSRC, setButtonEnabled){
+    setButtonEnabled(true)
+    let quote = "";
+    let imgSRC = "";
+    quoteSetter(quote)
+    setterImgSRC(imgSRC)
     if (document.getElementById("quoteCharacter") != null){
       document.getElementById("quoteCharacter").remove()
     }
@@ -102,42 +109,32 @@ export default App;
     }
     const main = document.getElementById("main");
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    svg.setAttribute('width', '400');
-    svg.setAttribute('height', '400');
+    svg.setAttribute('width', '200');
+    svg.setAttribute('height', '200');
     main.appendChild(svg);
     f();
     const div = document.createElement("div");
-    div.setAttribute("id", "quoteCharacter");
     const img = document.createElement("img");
     img.setAttribute("id", "imgCharacter");
-    div.hidden= true;
     img.hidden= true;
     const bb = new BreakingBad();
     let myPromise = new Promise(function(myResolve, myReject) {
       bb.getRandomQuote().then(data => {
-        const author = data[0].author;
-        const quote = data[0].quote;
-        bb.getCharacterInfoByName(bb.correctName(author)).then(characterInfo =>
-        {
-        img.src = characterInfo[0].img
-        }
-        
-        
-        )
-        div.innerHTML = quote + " (C) " + author
-
-          main.appendChild(div);
-          main.appendChild(img);
+        quote = data[0].quote + " (C) " +  data[0].author;
+        imgSRC = bb.getImagePath(data[0].author);
         })
+        
         setTimeout(() => {myResolve(); }, "5000")
         
       });
 
 
     myPromise.then( () =>{
-      d3.select("svg").remove()
-      div.hidden= false;
+      d3.select("svg").remove();
+      quoteSetter(quote)
+      setterImgSRC(imgSRC)
       img.hidden= false;
+      setButtonEnabled(false)
     }
       )
     }

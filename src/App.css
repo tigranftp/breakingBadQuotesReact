@@ -93,3 +93,7 @@ mix-blend-mode: difference;
 .button--janus:hover span {
 transform: translate3d(0,-10px,0);
 }
+
+.button--janus:disabled::before{
+  background: #ff0000;
+}
